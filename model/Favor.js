@@ -19,7 +19,7 @@ const favorSchema = new mongoose.Schema(
             required: true,
             default: "Requested"
         },
-        userId: {
+        favpreeId: {
             type: String,
             required: true,
             max: 1024,
