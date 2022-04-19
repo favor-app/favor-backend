@@ -14,6 +14,11 @@ const favorSchema = new mongoose.Schema(
             max: 1024,
             min: 6
         },
+        status:{
+            type: String,
+            required: true,
+            default: "Requested"
+        },
         userId: {
             type: String,
             required: true,
