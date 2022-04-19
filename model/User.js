@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
             min: 4,
             default: 'UCLA'
         },
-        phoneNumber: {
+        phone: {
             type: Number,
             required: true
         },
