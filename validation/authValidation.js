@@ -12,7 +12,7 @@ const registerValidation = data => {
     return schema.validate(data);
 };
 
-// Register Validation 
+// Login Validation 
 const loginValidation = data => {
     const schema = Joi.object().keys({
         email: Joi.string().min(6).regex(/.*ucla\.edu$/).messages({'string.pattern.base': `Must be a valid ucla.edu email`}).required().email(),

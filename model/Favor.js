@@ -14,12 +14,18 @@ const favorSchema = new mongoose.Schema(
             max: 1024,
             min: 6
         },
+        category: {
+            type: String,
+            required: true,
+            max: 1024,
+            min: 6
+        },
         status:{
             type: String,
             required: true,
             default: "Requested"
         },
-        favpreeId: {
+        favoreeId: {
             type: String,
             required: true,
             max: 1024,
@@ -42,4 +48,4 @@ const favorSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model('Favor', userSchema);
+module.exports = mongoose.model('Favor', favorSchema);

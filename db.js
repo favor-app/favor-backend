@@ -8,8 +8,8 @@ const connectDB = () => {
     const db = mongoose.connection;
     db.on("error", console.error.bind(console, "Connection ERROR: "));
     db.once("open", function () {
-    console.log("Connected successfully");
+    console.log("MongoDB server connected successfully");
     })
 };
 
-module.exports.connectDB = connectDB;
+module.exports = connectDB;
