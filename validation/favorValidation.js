@@ -8,7 +8,7 @@ const favorValidation = (data, user) => {
         description: Joi.string().min(6).required(), 
         category: Joi.string().min(6).required(),
         favoreeId: Joi.string().min(6).required(),
-        favorCoins: Joi.number().less(user.favorCoins)
+        favorCoins: Joi.number().less(user.favorCoins).min(1)
       });
     return schema.validate(data);
 };
