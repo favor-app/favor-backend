@@ -5,20 +5,71 @@ const Favor = require("../model/Favor");
 // Validate register and login fields
 const { favorValidation } = require("../validation/favorValidation");
 
-router.get('/:favorId', verify, async (req, res) => {
-    try{
-        const details = await Favor.findById(req.params.favorId);
+// Get a Favor by Favor ID
+router.get("/byCategory", verify, async (req, res) => {
+    try {
+        let category = req.query.category;
+        if (!category) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Favor.find({
+            category: category,
+            status: "Requested",
+        }).exec();
         res.send(details);
-    }
-    catch(err){
-        res.json({message: err});
+    } catch (err) {
+        res.json({ message: err });
     }
 });
 
+// Get a Favor by Favor ID
+router.get("/byId", verify, async (req, res) => {
+    try {
+        let favorId = req.query.favorId;
+        if (!favorId) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Favor.findById(favorId).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+// Get a Favor by Favoree ID
+router.get("/byFavoreeId", verify, async (req, res) => {
+    try {
+        let favoreeId = req.query.favoreeId;
+        if (!favoreeId) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Favor.find({
+            favoreeId: favoreeId,
+        }).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+// Get all Favors with status: 'Requested'
+router.get("/", verify, async (req, res) => {
+    try {
+        const details = await Favor.find({ status: "Requested" }).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+//Create a New Favor
 router.post("/", verify, async (req, res) => {
     // Validating the Data
-    const {error} = favorValidation(req.body, req.user);
-    if(error) return res.status(400).send(error.details[0].message);
+    const { error } = favorValidation(req.body, req.user);
+    if (error) return res.status(400).send(error.details[0].message);
 
     // Creatng a Favor
     const favor = new Favor({
@@ -34,6 +85,37 @@ router.post("/", verify, async (req, res) => {
         res.send({ favor: favor._id });
     } catch (err) {
         res.status(400).send(err);
+    }
+});
+
+router.delete("/byId", verify, async (req, res) => {
+    try {
+        let favorId = req.query.favorId;
+        if (!favorId) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Favor.findByIdAndRemove(favorId).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+router.get("/updateStatus", verify, async (req, res) => {
+    try {
+        let status = req.query.status;
+        let favorId = req.query.favorId;
+        if (!favorId || !status) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Favor.findByIdAndUpdate(favorId, {
+            status: status,
+        }).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
     }
 });
 
