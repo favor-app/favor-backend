@@ -1,0 +1,76 @@
+const router = require('express').Router();
+const verify = require('./verifyJWTToken');
+const User = require('../model/User');
+
+// Gets the details of the logged in user
+// users/
+router.get('/', verify, async (req, res) => {
+    try{
+        const details = await User.findById(req.user._id);
+        res.send(details);
+    }
+    catch(err){
+        res.json({message: err});
+    }
+});
+
+// Gets the details of any user
+// Must be logged in to use
+// users/userId
+router.get('/byId', verify, async (req, res) => {
+    try{
+        const details = await User.findById(req.query.userId);
+        res.send(details);
+    }
+    catch(err){
+        res.json({message: err});
+    }
+});
+
+router.get('/updateCoins', verify, async (req, res) => {
+    try {
+        let updateCoins = req.query.favorCoins;
+        let type = req.query.type;
+        if (!updateCoins) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await User.findById(req.user._id).exec();
+        const oldCoins = details.favorCoins;
+        let newCoinsInt = parseInt(oldCoins);
+        const updateCoinsInt = parseInt(updateCoins);
+        if(type == "add")
+        {
+            newCoinsInt += updateCoinsInt;
+        }
+        else if(type == "subtract")
+        {
+            newCoinsInt -= parseInt(updateCoins);
+        }
+        const newCoins = newCoinsInt.toString();
+        const updateDetails = await User.findByIdAndUpdate(req.user._id, {
+            favorCoins: newCoins,
+        }).exec();
+        res.send(updateDetails);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+// router.get("/updateStatus", verify, async (req, res) => {
+//     try {
+//         let status = req.query.status;
+//         let favorId = req.query.favorId;
+//         if (!favorId || !status) {
+//             res.status(400).send("Wrong Query Paramaters");
+//             return;
+//         }
+//         const details = await Favor.findByIdAndUpdate(favorId, {
+//             status: status,
+//         }).exec();
+//         res.send(details);
+//     } catch (err) {
+//         res.json({ message: err });
+//     }
+// });
+module.exports = router;
