@@ -7,8 +7,7 @@ const tradeSchema = new mongoose.Schema(
             required: true
         },
         favoreeId: {
-            type: String,
-            required: true
+            type: String
         },
         favorId: {
             type: String,
@@ -25,4 +24,4 @@ const tradeSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model('Favor', userSchema);
+module.exports = mongoose.model('Trade', tradeSchema);

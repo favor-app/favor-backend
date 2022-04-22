@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const authRoute = require('./routes/auth');
 const usersRoute = require('./routes/users');
 const favorsRoute = require('./routes/favors');
+const tradesRoute = require('./routes/trades');
 
 app.use(cors({credentials: true, origin: "*"}));
 app.use(express.urlencoded({ extended: false }));
@@ -17,7 +18,8 @@ connectDB();
 // Route Middlewares 
 app.use('/auth', authRoute);
 app.use('/users', usersRoute);
-app.use('/favors', favorsRoute)
+app.use('/favors', favorsRoute);
+app.use('/trades', tradesRoute);
 
 const portNumber = 3000;
 app.listen(portNumber, function () {

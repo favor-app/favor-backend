@@ -32,7 +32,7 @@ router.get("/byId", verify, async (req, res) => {
             return;
         }
         const details = await Favor.findById(favorId).exec();
-        res.send(details);
+        res.send(details.favoreeId);
     } catch (err) {
         res.json({ message: err });
     }
