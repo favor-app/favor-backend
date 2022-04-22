@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const verify = require("./verifyJWTToken");
 const Favor = require("../model/Favor");
+const User = require("../model/User");
 
 // Validate register and login fields
 const { favorValidation } = require("../validation/favorValidation");
@@ -68,8 +69,17 @@ router.get("/", verify, async (req, res) => {
 //Create a New Favor
 router.post("/", verify, async (req, res) => {
     // Validating the Data
+    let favoreeDetails = await User.findById(req.user._id).exec();
+    let favorCoins = favoreeDetails.favorCoins;
     const { error } = favorValidation(req.body, req.user);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+    if (favorCoins < req.body.favorCoins) {
+        return res
+            .status(400)
+            .send("Favor Coins can't be less than account balance.");
+    }
 
     // Creatng a Favor
     const favor = new Favor({
