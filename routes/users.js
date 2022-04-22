@@ -57,20 +57,4 @@ router.get('/updateCoins', verify, async (req, res) => {
     }
 });
 
-// router.get("/updateStatus", verify, async (req, res) => {
-//     try {
-//         let status = req.query.status;
-//         let favorId = req.query.favorId;
-//         if (!favorId || !status) {
-//             res.status(400).send("Wrong Query Paramaters");
-//             return;
-//         }
-//         const details = await Favor.findByIdAndUpdate(favorId, {
-//             status: status,
-//         }).exec();
-//         res.send(details);
-//     } catch (err) {
-//         res.json({ message: err });
-//     }
-// });
 module.exports = router;
