@@ -5,7 +5,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // Validate register and login fields
-const { registerValidation, loginValidation } = require("../validation/authValidation");
+const {
+    registerValidation,
+    loginValidation,
+} = require("../validation/authValidation");
 
 // VALIDATION
 const Joi = require("@hapi/joi");
@@ -61,6 +64,12 @@ router.post("/login", async (req, res) => {
         { _id: user._id, favorCoins: user.favorCoins },
         process.env.TOKEN_SECRET
     );
-    res.header("auth-token", token).send(token);
+
+    res.cookie("jwt", token, {
+        // expires: new Date(new Date().getTime()+60*24*36000),
+        jwtToken: token,
+        // You can't access these tokens in the client's javascript
+        httpOnly: true
+    }).header("auth-token", token).send("Successfully Logged In");
 });
 module.exports = router;
