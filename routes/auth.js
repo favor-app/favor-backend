@@ -66,10 +66,11 @@ router.post("/login", async (req, res) => {
     );
 
     res.cookie("jwt", token, {
+        //Cookie Expiry to trigger Logout after inactivity
         // expires: new Date(new Date().getTime()+60*24*36000),
         jwtToken: token,
         // You can't access these tokens in the client's javascript
         httpOnly: true
-    }).header("auth-token", token).send("Successfully Logged In");
+    }).send("Successfully Logged In");
 });
 module.exports = router;
