@@ -23,7 +23,7 @@ router.post("/", verify, async (req, res) => {
 
     try {
         const savedTrade = await trade.save();
-        res.send({ trade: trade._id });
+        res.send( trade );
     } catch (err) {
         res.status(400).send(err);
     }

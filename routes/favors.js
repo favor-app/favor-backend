@@ -81,7 +81,7 @@ router.post("/", verify, async (req, res) => {
     if (favorCoins < req.body.favorCoins) {
         return res
             .status(400)
-            .send("Favor Coins can't be less than account balance.");
+            .send("Favor Coins can't be more than account balance.");
     }
 
     // Creatng a Favor
@@ -119,6 +119,7 @@ router.get("/updateStatus", verify, async (req, res) => {
     try {
         let status = req.query.status;
         let favorId = req.query.favorId;
+        console.log(req.query);
         if (!favorId || !status) {
             res.status(400).send("Wrong Query Paramaters");
             return;
@@ -126,7 +127,7 @@ router.get("/updateStatus", verify, async (req, res) => {
         const details = await Favor.findByIdAndUpdate(favorId, {
             status: status,
         }).exec();
-        res.send(details);
+        res.send("Favor status succesfully changet to " + status);
     } catch (err) {
         res.json({ message: err });
     }
