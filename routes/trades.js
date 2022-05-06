@@ -50,15 +50,23 @@ router.get("/byFavoreeId", verify, async (req, res) => {
 // Get a Favor by Favorer ID
 router.get("/byFavorerId", verify, async (req, res) => {
     try {
-        let favorerId = req.query.favorerId;
+        let favorerId = req.user._id;
         if (!favorerId) {
-            res.status(400).send("Wrong Query Paramaters");
+            res.status(400).send("Error: User not logged in!");
             return;
         }
         const details = await Trade.find({
             favorerId: favorerId,
         }).exec();
-        res.send(details);
+
+        var favors = []
+        for(let i = 0; i < details.length; i++)
+        {
+            const favor = await Favor.findById(details[i].favorId);
+            favors.push(favor);
+        }
+        console.log(favors);
+        res.send(favors);
     } catch (err) {
         res.json({ message: err });
     }
