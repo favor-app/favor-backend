@@ -50,6 +50,7 @@ router.post("/register", async (req, res) => {
 // /auth/login
 router.post("/login", async (req, res) => {
     // Lets Validate the data before we a user
+    console.log(req.body);
     const { error } = loginValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
