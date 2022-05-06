@@ -10,7 +10,13 @@ const usersRoute = require('./routes/users');
 const favorsRoute = require('./routes/favors');
 const tradesRoute = require('./routes/trades');
 
-app.use(cors({credentials: true, origin: "*"}));
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
