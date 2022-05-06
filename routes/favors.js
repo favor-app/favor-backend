@@ -59,7 +59,10 @@ router.get("/byFavoreeId", verify, async (req, res) => {
 // Get all Favors with status: 'Requested'
 router.get("/", verify, async (req, res) => {
     try {
-        const details = await Favor.find({ status: "Requested" }).exec();
+        const details = await Favor.find({ status: "Requested" })
+            .where("favoreeId")
+            .ne(req.user._id)
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });

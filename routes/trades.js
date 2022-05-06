@@ -6,7 +6,7 @@ const Trade = require("../model/Trade");
 // Validate trade
 const { tradeValidation } = require("../validation/tradeValidation");
 
-// Post a favor to the trade table 
+// Accept and Post a favor to the trade table 
 router.post("/", verify, async (req, res) => {
     // Validating the Data
     const { error } = tradeValidation(req.body);
