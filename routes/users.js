@@ -31,11 +31,12 @@ router.get('/updateCoins', verify, async (req, res) => {
     try {
         let updateCoins = req.query.favorCoins;
         let type = req.query.type;
-        if (!updateCoins) {
+        let userId = req.query.userId;
+        if (!updateCoins || !type || !userId) {
             res.status(400).send("Wrong Query Paramaters");
             return;
         }
-        const details = await User.findById(req.user._id).exec();
+        const details = await User.findById(userId).exec();
         const oldCoins = details.favorCoins;
         let newCoinsInt = parseInt(oldCoins);
         const updateCoinsInt = parseInt(updateCoins);
@@ -48,7 +49,7 @@ router.get('/updateCoins', verify, async (req, res) => {
             newCoinsInt -= parseInt(updateCoins);
         }
         const newCoins = newCoinsInt.toString();
-        const updateDetails = await User.findByIdAndUpdate(req.user._id, {
+        const updateDetails = await User.findByIdAndUpdate(userId, {
             favorCoins: newCoins,
         }).exec();
         res.send(updateDetails);
