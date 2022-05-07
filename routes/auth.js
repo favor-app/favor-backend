@@ -70,8 +70,8 @@ router.post("/login", async (req, res) => {
     res.cookie("jwt", token, {
         //Cookie Expiry to trigger Logout after inactivity
         // expires: new Date(new Date().getTime()+60*24*36000),
-        jwtToken: token,
         // You can't access these tokens in the client's javascript
+        sameSite: 'none',
         secure: process.env.NODE_ENV !== "development",
         httpOnly: true,
     }).send("Successfully Logged In");
