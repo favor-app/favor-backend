@@ -30,7 +30,7 @@ app.use('/users', usersRoute);
 app.use('/favors', favorsRoute);
 app.use('/trades', tradesRoute);
 
-const portNumber = process.env.PORT || 3000;
+const portNumber = process.env.PORT || 4000;
 app.listen(portNumber, function () {
   console.log("FavorApp listening on port " + portNumber);
 });
