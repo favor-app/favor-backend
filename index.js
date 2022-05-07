@@ -3,7 +3,8 @@ const app = express();
 const connectDB = require("./db");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
 // Import Routes 
 const authRoute = require('./routes/auth');
 const usersRoute = require('./routes/users');
@@ -29,7 +30,7 @@ app.use('/users', usersRoute);
 app.use('/favors', favorsRoute);
 app.use('/trades', tradesRoute);
 
-const portNumber = 4000;
+const portNumber = process.env.PORT || 3000;
 app.listen(portNumber, function () {
   console.log("FavorApp listening on port " + portNumber);
 });
