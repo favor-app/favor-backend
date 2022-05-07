@@ -17,7 +17,11 @@ router.get("/byCategory", verify, async (req, res) => {
         const details = await Favor.find({
             category: category,
             status: "Requested",
-        }).exec();
+        })
+            .where("favoreeId")
+            .ne(req.user._id)
+            .sort({favorRequestTime: 'desc'})
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });
@@ -49,19 +53,23 @@ router.get("/byFavoreeId", verify, async (req, res) => {
         }
         const details = await Favor.find({
             favoreeId: favoreeId,
-        }).exec();
+        })
+            .sort({ favorRequestTime: "desc" })
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
-
-
 // Get all Favors with status: 'Requested'
 router.get("/", verify, async (req, res) => {
     try {
-        const details = await Favor.find({ status: "Requested" }).exec();
+        const details = await Favor.find({ status: "Requested" })
+            .where("favoreeId")
+            .ne(req.user._id)
+            .sort({ favorRequestTime: "desc" })
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });
@@ -80,7 +88,7 @@ router.post("/", verify, async (req, res) => {
     if (favorCoins < req.body.favorCoins) {
         return res
             .status(400)
-            .send("Favor Coins can't be less than account balance.");
+            .send("Favor Coins can't be more than account balance.");
     }
 
     // Creatng a Favor
@@ -94,7 +102,7 @@ router.post("/", verify, async (req, res) => {
 
     try {
         const savedFavor = await favor.save();
-        res.send({ favor: favor._id, favoreeId: req.user._id});
+        res.send({ favor: favor._id, favoreeId: req.user._id });
     } catch (err) {
         res.status(400).send(err);
     }
@@ -118,6 +126,7 @@ router.get("/updateStatus", verify, async (req, res) => {
     try {
         let status = req.query.status;
         let favorId = req.query.favorId;
+        console.log(req.query);
         if (!favorId || !status) {
             res.status(400).send("Wrong Query Paramaters");
             return;
@@ -125,15 +134,10 @@ router.get("/updateStatus", verify, async (req, res) => {
         const details = await Favor.findByIdAndUpdate(favorId, {
             status: status,
         }).exec();
-        res.send(details);
+        res.send("Favor status succesfully changet to " + status);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
 module.exports = router;
-
-// Requested
-// Accepted 
-// Expired 
-// Completed 
