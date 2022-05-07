@@ -17,7 +17,11 @@ router.get("/byCategory", verify, async (req, res) => {
         const details = await Favor.find({
             category: category,
             status: "Requested",
-        }).exec();
+        })
+            .where("favoreeId")
+            .ne(req.user._id)
+            .sort({favorRequestTime: 'desc'})
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });
@@ -49,7 +53,9 @@ router.get("/byFavoreeId", verify, async (req, res) => {
         }
         const details = await Favor.find({
             favoreeId: favoreeId,
-        }).exec();
+        })
+            .sort({ favorRequestTime: "desc" })
+            .exec();
         res.send(details);
     } catch (err) {
         res.json({ message: err });
@@ -62,6 +68,7 @@ router.get("/", verify, async (req, res) => {
         const details = await Favor.find({ status: "Requested" })
             .where("favoreeId")
             .ne(req.user._id)
+            .sort({ favorRequestTime: "desc" })
             .exec();
         res.send(details);
     } catch (err) {
