@@ -12,12 +12,11 @@ const favorsRoute = require('./routes/favors');
 const tradesRoute = require('./routes/trades');
 
 const corsConfig = {
-  origin: true,
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 };
 
 app.use(cors(corsConfig));
-app.options(process.env.FRONTEND_URL, cors(corsConfig));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
