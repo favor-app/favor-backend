@@ -29,6 +29,22 @@ router.post("/", verify, async (req, res) => {
     }
 });
 
+// Get a Favor by Favor ID
+router.get("/byFavorId", verify, async (req, res) => {
+    try {
+        let favorId = req.query.favorId;
+        if (!favorId) {
+            res.status(400).send("Wrong Query Paramaters");
+            return;
+        }
+        const details = await Trade.find({
+            favorId: favorId,
+        }).exec();
+        res.send(details);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
 
 // Get a Favor by Favoree ID
 router.get("/byFavoreeId", verify, async (req, res) => {
