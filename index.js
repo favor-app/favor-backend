@@ -17,7 +17,7 @@ const corsConfig = {
 };
 
 app.use(cors(corsConfig));
-app.options('*', cors(corsConfig));
+app.options(process.env.FRONTEND_URL, cors(corsConfig));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
