@@ -67,23 +67,22 @@ router.post("/login", async (req, res) => {
         process.env.TOKEN_SECRET
     );
 
-    res.cookie("jwt", token, {
-        //Cookie Expiry to trigger Logout after inactivity
-        // expires: new Date(new Date().getTime()+60*24*36000),
-        // You can't access these tokens in the client's javascript
-        sameSite: "none",
-        secure: process.env.NODE_ENV !== "development",
-        httpOnly: true,
-    }).send("Successfully Logged In");
+    res.send(token);
+
+    // res.cookie("jwt", token, {
+    //     sameSite: "none",
+    //     secure: process.env.NODE_ENV !== "development",
+    //     httpOnly: true,
+    // }).send("Successfully Logged In");
 });
 
 router.get("/logout", verify, async (req, res) => {
     try {
-        res.clearCookie("jwt", {
-            sameSite: "none",
-            secure: process.env.NODE_ENV !== "development",
-            httpOnly: true
-        }).send("Successfully Logged out");
+        // res.clearCookie("jwt", {
+        //     sameSite: "none",
+        //     secure: process.env.NODE_ENV !== "development",
+        //     httpOnly: true
+        // }).send("Successfully Logged out");
     } catch (err) {
         res.status(400).send(err);
     }

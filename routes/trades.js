@@ -81,7 +81,6 @@ router.get("/byFavorerId", verify, async (req, res) => {
             const favor = await Favor.findById(details[i].favorId);
             favors.push(favor);
         }
-        console.log(favors);
         res.send(favors);
     } catch (err) {
         res.json({ message: err });
