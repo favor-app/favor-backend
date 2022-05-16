@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
         },
         favorCoins: {
             type: Number, 
-            default: 3,
+            default: 10,
             min: 0
         },
         
