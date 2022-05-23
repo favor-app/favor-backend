@@ -2,14 +2,23 @@ const router = require("express").Router();
 const verify = require("./verifyJWTToken");
 const Favor = require("../model/Favor");
 const User = require("../model/User");
-
+var moment = require('moment');
+var datejs = require('datejs');
 // Validate register and login fields
 const { favorValidation } = require("../validation/favorValidation");
+
+const getValidStartTime = () => {
+    const nowDateObj = new Date(Date.now());
+    // console.log(date);
+    var oldDateObj = moment(nowDateObj).subtract(60, 'm').toDate();
+    return oldDateObj;
+};
 
 // Get a Favor by Favor ID
 router.get("/byCategory", verify, async (req, res) => {
     try {
         let category = req.query.category;
+        let validDate = getValidStartTime();
         if (!category) {
             res.status(400).send("Wrong Query Paramaters");
             return;
@@ -17,6 +26,7 @@ router.get("/byCategory", verify, async (req, res) => {
         const details = await Favor.find({
             category: category,
             status: "Requested",
+            favorRequestTime: {"$gt": validDate}
         })
             .where("favoreeId")
             .ne(req.user._id)
@@ -47,12 +57,14 @@ router.get("/byId", verify, async (req, res) => {
 router.get("/byFavoreeId", verify, async (req, res) => {
     try {
         let favoreeId = req.query.favoreeId;
+        let validDate = getValidStartTime();
         if (!favoreeId) {
             res.status(400).send("Wrong Query Paramaters");
             return;
         }
         const details = await Favor.find({
             favoreeId: favoreeId,
+            favorRequestTime: {"$gt": validDate}
         })
             .sort({ favorRequestTime: "desc" })
             .exec();
@@ -64,8 +76,9 @@ router.get("/byFavoreeId", verify, async (req, res) => {
 
 // Get all Favors with status: 'Requested'
 router.get("/", verify, async (req, res) => {
+    let validDate = getValidStartTime();
     try {
-        const details = await Favor.find({ status: "Requested" })
+        const details = await Favor.find({ status: "Requested", favorRequestTime: {"$gt": validDate} })
             .where("favoreeId")
             .ne(req.user._id)
             .sort({ favorRequestTime: "desc" })
